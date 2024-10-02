@@ -24,7 +24,12 @@ app.get('/all-todo',(req,res)=>{
 })
 
 app.get('/create-todo',(req,res)=>{
+  
+  // TODO : Get all the Todos from  mongodb 
+  
   res.send("List of all todos !!")
+
+
 })
 
 
@@ -44,12 +49,23 @@ app.post('/create-todo',(req,res)=>{
       res.status(411).json({ message: 'Wrong Inputs' })
       return 
     }
+
+    // TODO : Put it in the mongodb 
     
     res.send("Creating a Todo item POST ROUTE")                            
 
 })
 
-app.put("/completed",()=>{
+app.put("/completed",(req,res)=>{
+      
+    const updatepPayload = updatetodo.safeParse(req.body)
+    
+    if(!updatepPayload.success){
+      res.status(411).json({message:"Wrong Inputs , Please Update it !!"})
+      return;
+    }
+
+    // TODO : Update in the mongodb 
 
 })
 
