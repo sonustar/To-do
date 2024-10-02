@@ -64,7 +64,8 @@ app.post('/create-todo',async (req,res)=>{
     
     await todo.create({
       title:title,
-      description:description
+      description:description,
+      completed: false 
     })
 
     
@@ -72,7 +73,7 @@ app.post('/create-todo',async (req,res)=>{
 
 })
 
-app.put("/completed",(req,res)=>{
+app.put("/completed",async (req,res)=>{
       
     const updatepPayload = updatetodo.safeParse(req.body)
     
@@ -82,6 +83,14 @@ app.put("/completed",(req,res)=>{
     }
 
     // TODO : Update in the mongodb 
+
+    await todo.update({
+         _id : req.body.id
+    },{
+      completed:true
+    })
+
+    res.status(500).json({msg:"To do marked Completed !!"})
 
 
 })
