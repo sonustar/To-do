@@ -1,7 +1,10 @@
 const express = require('express')
 const {z}= require('zod')
 const {createtodo,updatetodo} = require("./types")
+require('dotenv').config()
 const  mongoose = require('mongoose')
+const { todo } = require('./db')
+
 
 const app = express()
 
@@ -17,25 +20,25 @@ app.get('/',(req,res)=>{
     res.send("Hii")
 })
 
-mongoose.connect("mongodb+srv://Supu:VPWCHqbkbsMH9DPY@cluster0.agqbz.mongodb.net/").then(()=>{
+mongoose.connect(process.env.MONGO_URI).then(()=>{
   console.log("DB connected ")
 }).catch((err)=>{
   console.log(err)
 })
 
+ 
+app.get('/all-todo',async (req,res)=>{
 
-app.get('/all-todo',(req,res)=>{
-    res.send("List of all todos !!")
+  // TODO : Get all todos from mongodb :
+    
+    const ans = await todo.find({})
+    console.log(ans)
+    
+    res.json({ msg : ans })
 })
 
-app.get('/create-todo',(req,res)=>{
-  
-  // TODO : Get all the Todos from  mongodb 
-  
-  res.send("List of all todos !!")
 
 
-})
 
 
 // User will send to the server : 
@@ -45,7 +48,9 @@ app.get('/create-todo',(req,res)=>{
 
 // }
 
-app.post('/create-todo',(req,res)=>{
+app.post('/create-todo',async (req,res)=>{
+
+    const {title , description} = req.body
     
     
     const Parsedpayload = createtodo.safeParse(req.body)
@@ -55,7 +60,13 @@ app.post('/create-todo',(req,res)=>{
       return 
     }
 
-    // TODO : Put it in the mongodb 
+    // TODO : Put it in the mongodb
+    
+    await todo.create({
+      title:title,
+      description:description
+    })
+
     
     res.send("Creating a Todo item POST ROUTE")                            
 
@@ -71,6 +82,7 @@ app.put("/completed",(req,res)=>{
     }
 
     // TODO : Update in the mongodb 
+
 
 })
 
