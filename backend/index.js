@@ -1,6 +1,7 @@
 const express = require('express')
 const {z}= require('zod')
 const {createtodo,updatetodo} = require("./types")
+const  mongoose = require('mongoose')
 
 const app = express()
 
@@ -16,7 +17,11 @@ app.get('/',(req,res)=>{
     res.send("Hii")
 })
 
-
+mongoose.connect("mongodb+srv://Supu:VPWCHqbkbsMH9DPY@cluster0.agqbz.mongodb.net/").then(()=>{
+  console.log("DB connected ")
+}).catch((err)=>{
+  console.log(err)
+})
 
 
 app.get('/all-todo',(req,res)=>{
