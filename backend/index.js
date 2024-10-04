@@ -2,14 +2,17 @@ const express = require('express')
 const {z}= require('zod')
 const {createtodo,updatetodo} = require("./types")
 require('dotenv').config()
+const cors = require('cors')
 const  mongoose = require('mongoose')
 const { todo } = require('./db')
+
 
 
 const app = express()
 
 
 app.use(express.json())
+app.use(cors());
 
 // How many routes do we require !! 
 // creating a todo item 
@@ -26,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI).then(()=>{
   console.log(err)
 })
 
+
  
 app.get('/all-todo',async (req,res)=>{
 
@@ -34,7 +38,7 @@ app.get('/all-todo',async (req,res)=>{
     const ans = await todo.find({})
     console.log(ans)
     
-    res.json({ msg : ans })
+    res.json(ans)
 })
 
 
